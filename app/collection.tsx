@@ -74,7 +74,7 @@ export default function Collection() {
         />
 
         {/* Section Title */}
-        <Text style={styles.sectionTitle}>Your Stickers</Text>
+        <Text style={styles.sectionTitle}>Your Collections</Text>
 
         {/* Sticker Grid */}
         <View style={styles.grid}>

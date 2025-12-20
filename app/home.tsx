@@ -3,6 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef } from 'react';
 import { Animated, Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width } = Dimensions.get('window');
 
@@ -58,6 +59,7 @@ export default function Home() {
   });
 
   return (
+    <SafeAreaView style={styles.safeAreaViewContainer}>
     <View style={styles.container}>
       {/* Hero Section */}
       <View style={styles.heroSection}>
@@ -155,6 +157,7 @@ export default function Home() {
         </Text>
       </View>
     </View>
+  </SafeAreaView>
   );
 }
 
@@ -163,6 +166,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#1A0A3C',
     paddingTop: 50,
+    paddingHorizontal: 16,
+  },
+  safeAreaViewContainer: {
+    flex: 1,
+    backgroundColor: '#1A0A3C',
+    // paddingTop: 50,
     paddingHorizontal: 16,
   },
   heroSection: {

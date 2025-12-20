@@ -1,6 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { usePathname, useRouter } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function BottomNav() {
   const router = useRouter();
@@ -13,7 +14,7 @@ export default function BottomNav() {
   ];
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.safeAreaViewContainer}>
       {tabs.map((tab) => (
         <TouchableOpacity
           key={tab.name}
@@ -35,7 +36,7 @@ export default function BottomNav() {
           </Text>
         </TouchableOpacity>
       ))}
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -45,6 +46,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     backgroundColor: '#4B0082',
     paddingVertical: 10,
+  },
+  safeAreaViewContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#4B0082',
+    // paddingVerti,
   },
   tab: { alignItems: 'center' },
   text: { color: 'white', fontSize: 12, marginTop: 2 },
