@@ -6,7 +6,8 @@ export default function Layout() {
   const pathname = usePathname();
 
   // hide navbar only on splash
-  const hideNav = pathname === '/' || pathname === '/splash';
+  // Only hide nav on splash screen (root route)
+  const hideNav = pathname === '/';
 
   return (
     <View style={styles.container}>

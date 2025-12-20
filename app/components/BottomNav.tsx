@@ -7,7 +7,7 @@ export default function BottomNav() {
   const path = usePathname();
 
   const tabs = [
-    { name: 'Home', icon: 'home', route: '/' },
+    { name: 'Home', icon: 'home', route: '/home' },
     { name: 'Catch', icon: 'catching-pokemon', route: '/catch' },
     { name: 'Collection', icon: 'collections', route: '/collection' },
   ];
