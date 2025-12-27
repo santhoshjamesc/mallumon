@@ -79,7 +79,7 @@ export default function Home() {
       </View>
 
       {/* Quick Stats */}
-      <View style={styles.statsRow}>
+      {/* <View style={styles.statsRow}>
         <View style={styles.statCard}>
           <MaterialIcons name="collections" size={24} color="#8B5CF6" />
           <Text style={styles.statNumber}>27</Text>
@@ -95,9 +95,9 @@ export default function Home() {
           <Text style={styles.statNumber}>3</Text>
           <Text style={styles.statLabel}>Legendary</Text>
         </View>
-      </View>
+      </View> */}
 
-      {/* Action Cards */}
+      {/* Action Cards
       <View style={styles.actionsContainer}>
         <TouchableOpacity
           style={styles.actionCard}
@@ -131,8 +131,8 @@ export default function Home() {
             <Text style={styles.actionTitle}>My Collection</Text>
             <Text style={styles.actionDesc}>View all stickers</Text>
           </LinearGradient>
-        </TouchableOpacity>
-      </View>
+        </TouchableOpacity> */}
+      {/* </View> */}
 
       {/* Info Cards */}
       <View style={styles.infoRow}>
@@ -143,6 +143,10 @@ export default function Home() {
         <View style={styles.infoCard}>
           <Ionicons name="time" size={20} color="#8B5CF6" />
           <Text style={styles.infoText}>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+        </View>
+        <View style={styles.infoCard}>
+          <Ionicons name="location" size={20} color="#8B5CF6" />
+          <Text style={styles.infoText}>Location Active</Text>
         </View>
       </View>
 
