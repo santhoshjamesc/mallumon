@@ -1,8 +1,8 @@
-import { FontAwesome5, Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import * as Location from 'expo-location';
 import { useRouter } from 'expo-router';
-import { useEffect, useRef } from 'react';
-import { Animated, Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width } = Dimensions.get('window');
@@ -11,6 +11,44 @@ export default function Home() {
   const router = useRouter();
   const floatAnim = useRef(new Animated.Value(0)).current;
   const glowAnim = useRef(new Animated.Value(0)).current;
+
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [locationName, setLocationName] = useState('Locating...');
+  const [locationStatus, setLocationStatus] = useState('GPS Active');
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setLocationName('Permission Denied');
+        return;
+      }
+
+      try {
+        let location = await Location.getCurrentPositionAsync({});
+        let address = await Location.reverseGeocodeAsync({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude
+        });
+
+        if (address && address.length > 0) {
+          setLocationName(address[0].city || address[0].name || 'Unknown');
+          setLocationStatus(address[0].region || address[0].country || 'GPS Active');
+        } else {
+          setLocationName('Unknown Loc');
+        }
+      } catch (error) {
+        setLocationName('Error');
+      }
+    })();
+  }, []);
 
   // Floating animation for logo
   useEffect(() => {
@@ -60,26 +98,26 @@ export default function Home() {
 
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
-    <View style={styles.container}>
-      {/* Hero Section */}
-      <View style={styles.heroSection}>
-        <Animated.View
-          style={[
-            styles.logoContainer,
-            { transform: [{ translateY: floatTranslate }] },
-          ]}
-        >
-          <Animated.View style={[styles.glow, { opacity: glowOpacity }]} />
-          <View style={styles.logoInner}>
-            <MaterialIcons name="catching-pokemon" size={48} color="#E9D5FF" />
-          </View>
-        </Animated.View>
-        <Text style={styles.title}>Mallumon</Text>
-        <Text style={styles.subtitle}>Catch 'em all in the real world</Text>
-      </View>
+      <View style={styles.container}>
+        {/* Hero Section */}
+        <View style={styles.heroSection}>
+          <Animated.View
+            style={[
+              styles.logoContainer,
+              { transform: [{ translateY: floatTranslate }] },
+            ]}
+          >
+            <Animated.View style={[styles.glow, { opacity: glowOpacity }]} />
+            <View style={styles.logoInner}>
+              <MaterialIcons name="catching-pokemon" size={48} color="#E9D5FF" />
+            </View>
+          </Animated.View>
+          <Text style={styles.title}>Mallumon</Text>
+          <Text style={styles.subtitle}>Catch 'em all in the real world</Text>
+        </View>
 
-      {/* Quick Stats */}
-      {/* <View style={styles.statsRow}>
+        {/* Quick Stats */}
+        {/* <View style={styles.statsRow}>
         <View style={styles.statCard}>
           <MaterialIcons name="collections" size={24} color="#8B5CF6" />
           <Text style={styles.statNumber}>27</Text>
@@ -97,7 +135,7 @@ export default function Home() {
         </View>
       </View> */}
 
-      {/* Action Cards
+        {/* Action Cards
       <View style={styles.actionsContainer}>
         <TouchableOpacity
           style={styles.actionCard}
@@ -132,36 +170,38 @@ export default function Home() {
             <Text style={styles.actionDesc}>View all stickers</Text>
           </LinearGradient>
         </TouchableOpacity> */}
-      {/* </View> */}
+        {/* </View> */}
 
-      {/* Info Cards */}
-      <View style={styles.infoRow}>
-        <View style={styles.infoCard}>
-          <Ionicons name="location" size={20} color="#8B5CF6" />
-          <Text style={styles.infoText}>Location Active</Text>
+        {/* Info Cards */}
+        <View style={styles.infoRow}>
+          <View style={styles.infoCard}>
+            <Ionicons name="location" size={20} color="#8B5CF6" />
+            <Text style={styles.infoText} numberOfLines={1}>{locationName}</Text>
+          </View>
+          <View style={styles.infoCard}>
+            <Ionicons name="time" size={20} color="#8B5CF6" />
+            <Text style={styles.infoText} numberOfLines={1}>
+              {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </Text>
+          </View>
+          <View style={styles.infoCard}>
+            <MaterialIcons name="my-location" size={20} color="#8B5CF6" />
+            <Text style={styles.infoText} numberOfLines={1}>{locationStatus}</Text>
+          </View>
         </View>
-        <View style={styles.infoCard}>
-          <Ionicons name="time" size={20} color="#8B5CF6" />
-          <Text style={styles.infoText}>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
-        </View>
-        <View style={styles.infoCard}>
-          <Ionicons name="location" size={20} color="#8B5CF6" />
-          <Text style={styles.infoText}>Location Active</Text>
+
+        {/* Daily Tip */}
+        <View style={styles.tipCard}>
+          <View style={styles.tipHeader}>
+            <Ionicons name="bulb" size={20} color="#FBBF24" />
+            <Text style={styles.tipTitle}>Daily Tip</Text>
+          </View>
+          <Text style={styles.tipText}>
+            Rare stickers spawn more frequently during sunset hours! 🌅
+          </Text>
         </View>
       </View>
-
-      {/* Daily Tip */}
-      <View style={styles.tipCard}>
-        <View style={styles.tipHeader}>
-          <Ionicons name="bulb" size={20} color="#FBBF24" />
-          <Text style={styles.tipTitle}>Daily Tip</Text>
-        </View>
-        <Text style={styles.tipText}>
-          Rare stickers spawn more frequently during sunset hours! 🌅
-        </Text>
-      </View>
-    </View>
-  </SafeAreaView>
+    </SafeAreaView>
   );
 }
 
@@ -169,13 +209,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1A0A3C',
-    paddingTop: 50,
     paddingHorizontal: 16,
+    justifyContent: 'center',
   },
   safeAreaViewContainer: {
     flex: 1,
     backgroundColor: '#1A0A3C',
-    // paddingTop: 50,
     paddingHorizontal: 16,
   },
   heroSection: {
@@ -282,17 +321,19 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#2D1B4E',
     borderRadius: 12,
     paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: 8,
     marginHorizontal: 4,
   },
   infoText: {
     color: '#E9D5FF',
     fontSize: 12,
     fontWeight: '600',
-    marginLeft: 8,
+    marginLeft: 6,
+    textAlign: 'center',
   },
   tipCard: {
     backgroundColor: '#2D1B4E',
